@@ -29,7 +29,10 @@
 \definecolor{mypink}{RGB}{228, 0, 124}
 \definecolor{ximatrixcolor}{HTML}{b7BC53}
 \definecolor{svectorcolor}{HTML}{5ABAC2}
-\definecolor{xvectorcolor}{HTML}{C860C2}
+%% \definecolor{xvectorcolor}{HTML}{C34BB0}
+%% \definecolor{xvectorcolor}{HTML}{3C3DB5}
+\definecolor{xvectorcolor}{HTML}{7851DB}
+
 
 \tikzstyle{input}=[draw,fill=myyellow,minimum width=2.6cm,thin]
 \tikzstyle{method}=[draw,fill=mypink,minimum width=1.8cm]
@@ -79,7 +82,7 @@ dramatic impact on the performance of the estimations.
 On the other hand, methods that work without initialization have been developed in computer vision but
 they can only determine physical quantities \structure{up to a scale}.
 
-Recently, a \structure{Closed-Form Solution} that recovers the initial velocity, the roll and pitch angles and the absolute scale by fusing visual and inertial measurements has been derived~\cite{ref1, ref2}.
+Recently, a \structure{Closed-Form Solution} that recovers the initial velocity, the roll and pitch angles and the absolute scale by fusing visual and inertial measurements has been derived~\cite{Martinelli2014,Martinelli2012}.
 While mathematically sound, this method is \structure{not robust} to noisy sensor data.
 We added a \structure{key step} that makes the original method \structure{usable in practice}.
 
@@ -90,12 +93,14 @@ We added a \structure{key step} that makes the original method \structure{usable
 
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.4\columnwidth}
+  \hspace*{-1em}
+  \begin{subfigure}[t]{0.3\columnwidth}
+    \caption{Filter-based fusion}
     %% \resizebox{\columnwidth}{!}{
     %%   \raggedleft
-    \hspace{-1cm}
-    \begin{tikzpicture}[every node/.style={transform shape}]
-      \node (A) at (0,0) [input, fill=blue!60] {Initial State};
+    \hspace*{-3em}
+    \begin{tikzpicture}[scale=0.8,every node/.style={transform shape}]
+      \node (A) at (-5,0) [input, fill=blue!60] {Initial State};
       \node (dummy1) [dummy, right=2mm of A] {};
       \node (C) [input,right=2mm of dummy1] {Measurements};
       \node (D) [method,below=2cm of dummy1] {Fusion};
@@ -117,8 +122,11 @@ We added a \structure{key step} that makes the original method \structure{usable
     \end{tikzpicture}
     %% }
   \end{subfigure}~
-  \begin{subfigure}[b]{0.4\columnwidth}
-    \begin{tikzpicture}[every node/.style={transform shape}]
+  \hspace*{5.5em}
+  \begin{subfigure}[t]{0.3\columnwidth}
+    \caption{Deterministic fusion}
+    \hspace*{1.2em}
+    \begin{tikzpicture}[scale=0.8,every node/.style={transform shape}]
       \node (C2) [input] {Measurements};
       \node (D2) [method,below=2cm of C2] {Fusion};
       \node (E2) [input, below=2cm of D2, fill=green] {State};
@@ -130,13 +138,15 @@ We added a \structure{key step} that makes the original method \structure{usable
   \end{subfigure}
 \end{figure}
 
+\vspace{4cm}
+
 \section{The Closed-Form Solution}
 
-The Closed-Form Solution consists of a single equation. This equation expresses the \textcolor{red}{initial velocity}, the \textcolor{green}{distance to point-features} and the \textcolor{blue}{gravity} linearly with respect to the visual-inertial measurements.
+The Closed-Form Solution consists of a single equation that expresses the \textcolor{red}{initial velocity}, the \textcolor{blue}{distance to point-features} and the \textcolor{green}{gravity} linearly with respect to the visual and inertial measurements.
 Note that the knowledge of the gravity in the local frame is equivalent to the knowledge of the roll and pitch angles.
 
 \[
-S_j = \textcolor{green}{\lambda_1^i}\mu_1^i - \textcolor{red}{V} t_j - \textcolor{blue}{G} \frac{t_j^2}{2} - \textcolor{green}{\lambda^i_j} \mu^i_j
+S_j = \textcolor{blue}{\lambda_1^i}\mu_1^i - \textcolor{red}{V} t_j - \textcolor{green}{G} \frac{t_j^2}{2} - \textcolor{blue}{\lambda^i_j} \mu^i_j
 \]
 
 This equation is valid for every observed point-feature $i$ at any time $t_j$.
@@ -148,6 +158,9 @@ We therefore have an overconstrained linear system that we can write in matrix f
 
     We can therefore recover the initial velocity, the distance to the point-features and the roll and pitch angle of the drone by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
     This method does not require any initialization.
+
+\vfill
+\columnbreak
 
 \section{Test setup}
 
@@ -178,27 +191,29 @@ by experimenting with real and synthetic data, we realized that the performance 
     \caption{Speed estimation error}
     \centering
     \begin{subfigure}[b]{0.47\columnwidth}
-      \resizebox{\columnwidth}{!}{\input{graph/accBiasSpeed}}
       \caption{Varying accelerometer bias}
+      \resizebox{\columnwidth}{!}{\input{graph/accBiasSpeed}}
     \end{subfigure}
     \begin{subfigure}[b]{0.47\columnwidth}
-      \resizebox{\columnwidth}{!}{\input{graph/gyroBiasSpeed}}
       \caption{Varying gyroscope bias}
+      \resizebox{\columnwidth}{!}{\input{graph/gyroBiasSpeed}}
     \end{subfigure}
   \end{figure}
 
 
 \section{Our method}
 
-The goal is to factor out the gyroscope bias to improve the performance of the Closed-Form Solution.
-Optimally, we would add the gyroscope bias as an unknown term in $X$.
-Unfortunately we cannot express the gyroscope bias linearly with respect to the visual-inertial measurements.
+The goal is to \structure{factor out the gyroscope bias} to improve the performance of the Closed-Form Solution.
+Optimally, we would add the gyroscope bias as an unknown term in $\textcolor{xvectorcolor}{X}$.
+Unfortunately we \structure{cannot express the gyroscope bias linearly} with respect to the visual-inertial measurements.
 
-We propose a different approach: a non-linear minimization of the residual with respect to the gyroscope bias.
-In other words, we recover $X$ by minimizing the cost function:
+We propose a different approach: a \structure{non-linear minimization of the residual with respect to the gyroscope bias}.
+In other words, we recover $\textcolor{xvectorcolor}{X}$ by minimizing the cost function:
+
+\vspace{-1cm}
 
 \[
-cost(B) = \argmin_X ||\Xi X - S||^2
+cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X} - S||^2
 \]
 {\small \emph{With:\\
 $B$ the gyroscope bias,\\
@@ -216,14 +231,14 @@ This symmetry is induced by the strong weight of the gravity in the system.
 In order to prevent our optimization to converge towards high and unlikely values of the gyroscope bias, we add a regularization term to our cost function:
 
 \[
-cost(B) = \argmin_X ||\Xi X - S||^2 \textcolor{blue}{+ \lambda \times |B|}
+cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X} - S||^2 \textcolor{blue}{+ \lambda \times |B|}
 \]
 
 \section{Results}
 \begin{figure}[h!]
   \centering
   \caption{Speed estimation error over a time sequence (duration set to 3s)}
-  \resizebox{0.5\textwidth}{!}{\input{graph/speed}}
+  \resizebox{0.7\columnwidth}{!}{\input{graph/speed}}
 \end{figure}
 
 The original method estimates the speed with approximately 80\% error whereas our method can estimate it with 10\% error.
@@ -240,15 +255,9 @@ does not require an initialization and now provides the gyroscope bias.
 
 \subsection{References}
 
-\begin{thebibliography}{99}
+\bibliographystyle{plain}
+\bibliography{library}
 
-\bibitem{ref1} J.~Doe, Article name, \textit{Phys. Rev. Lett.}
-
-\bibitem{ref2} J.~Doe, J. Smith, Other article name, \textit{Phys. Rev. Lett.}
-
-\bibitem{web} \url{http://www.google.pl}
-
-\end{thebibliography}
 %--End of references-----------------------------------------------------------
 
 \end{multicols}

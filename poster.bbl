@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{Martinelli2014}
+Agostino Martinelli.
+\newblock {Closed-form solution of visual-inertial structure from motion}.
+\newblock {\em International Journal of Computer Vision}, 106(2):138--152,
+  2014.
+
+\bibitem{Martinelli2012}
+Agostino Martinelli and Roland Siegwart.
+\newblock {Vision and IMU Data Fusion: Closed-Form Determination of the
+  Absolute Scale, Speed, and Attitude}.
+\newblock {\em Handbook of Intelligent Vehicles}, 28(1):1335--1354, 2012.
+
+\end{thebibliography}
