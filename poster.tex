@@ -48,7 +48,7 @@
 \title
 [ARSO, 1 - 3 July 2015, Lyon, France] % Conference
 { % Poster title
-Absolute scale velocity determination combining visual and inertial measurements for drones
+Absolute scale velocity determination combining visual and inertial measurements for micro aerial vehicles
 }
 
 \author{ % Authors
@@ -93,7 +93,6 @@ We added a \structure{key step} that makes the original method \structure{usable
 
 \begin{figure}
   \centering
-  \hspace*{-1em}
   \begin{subfigure}[t]{0.3\columnwidth}
     \caption{Filter based fusion}
     %% \resizebox{\columnwidth}{!}{
@@ -122,10 +121,10 @@ We added a \structure{key step} that makes the original method \structure{usable
     \end{tikzpicture}
     %% }
   \end{subfigure}~
-  \hspace*{5.5em}
+  \hspace*{6em}
   \begin{subfigure}[t]{0.3\columnwidth}
     \caption{Deterministic fusion}
-    \hspace*{1.2em}
+    \hspace*{0.5em}
     \begin{tikzpicture}[scale=0.8,every node/.style={transform shape}]
       \node (C2) [input] {Measurements};
       \node (D2) [method,below=2cm of C2] {Fusion};
@@ -138,7 +137,7 @@ We added a \structure{key step} that makes the original method \structure{usable
   \end{subfigure}
 \end{figure}
 
-\vspace{4cm}
+\vspace{5.9cm}
 
 \section{The Closed-Form Solution}
 
@@ -149,6 +148,8 @@ Note that the knowledge of the gravity in the local frame is equivalent to the k
 S_j = \textcolor{blue}{\lambda_1^i}\mu_1^i - \textcolor{red}{V} t_j - \textcolor{green}{G} \frac{t_j^2}{2} - \textcolor{blue}{\lambda^i_j} \mu^i_j
 \]
 
+\vspace{1cm}
+
 This equation is valid for every observed point-feature $i$ at any time $t_j$.
 We therefore have an overconstrained linear system that we can write in matrix formulation:
 
@@ -156,18 +157,12 @@ We therefore have an overconstrained linear system that we can write in matrix f
 \Xi \textcolor{xvectorcolor}{X} = S
 \]
 
-    We can therefore recover the initial velocity, the distance to the point-features and the roll and pitch angle of the drone by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
-    This method does not require any initialization.
+    The \textcolor{red}{initial velocity}, the \textcolor{blue}{distance to the point-features} and the \textcolor{green}{roll and pitch angles} of the drone can be recovered by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
+    This method does not require any initialization or knowledge of previous states.
 
-\subsection{Original performance}
+    \vfill
+    \columnbreak
 
-\begin{figure}[h!]
-  \centering
-  \resizebox{0.7\columnwidth}{!}{\input{graph/CF2}}
-  %% \caption{Performance of the Original Closed-Form Solution}
-\end{figure}
-
-With around 45\% of error on the speed and the distance to the features after 4 seconds of integration, the Original Closed-Form Solution does not perform very well on terrain data.
 
 \section{Test setup}
 
@@ -176,10 +171,19 @@ With around 45\% of error on the speed and the distance to the features after 4 
 \includegraphics[width=\columnwidth]{images/setupTestDroneError.png}
 \end{figure}
 
+\begin{figure}[h!]
+  \centering
+  \caption{Performance of the Original Closed-Form solution}
+  \resizebox{0.7\columnwidth}{!}{\input{graph/CF2}}
+  %% \caption{Performance of the Original Closed-Form Solution}
+\end{figure}
+
+With around 45\% of error on the speed and the distance to the features after 4 seconds of integration, the Original Closed-Form Solution does not perform very well on terrain data.
+
 
 \section{Impact of bias}
-We studied the impact of biased inertial sensors on the performance of the original Closed-Form Solution.
-by experimenting with real and synthetic data, we realized that the performance is:
+We studied the impact of biased inertial sensors on the performance of the Original Closed-Form Solution.
+By experimenting with real and synthetic data, we realized that the performance is:
 \begin{itemize}
  \item Strongly affected by the gyroscope bias;
  \item Weakly affected by the accelerometer bias.
@@ -205,6 +209,9 @@ The goal is to \structure{factor out the gyroscope bias} to improve the performa
 Optimally, we would add the gyroscope bias as an unknown term in $\textcolor{xvectorcolor}{X}$.
 Unfortunately we \structure{cannot express the gyroscope bias linearly} with respect to the visual-inertial measurements.
 
+\vfill
+\columnbreak
+
 We propose a different approach: a \structure{non-linear minimization of the residual with respect to the gyroscope bias}.
 In other words, we recover $\textcolor{xvectorcolor}{X}$ by minimizing the cost function:
 
@@ -213,9 +220,11 @@ In other words, we recover $\textcolor{xvectorcolor}{X}$ by minimizing the cost 
 \[
 cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X} - S||^2
 \]
-{\small \emph{With:\\
-$B$ the gyroscope bias,\\
-$\Xi$ and $S$ computed with respect to $B$}}
+  {\small With:
+    \begin{itemize}
+    \item $B$ the gyroscope bias;
+    \item $\Xi$ and $S$ computed with respect to $B$
+  \end{itemize}}
 
 The gyroscope bias is a 3D vector $B=[B_x,B_y,B_z]$. We can plot this cost function with respect to two components of the gyroscope bias:
 \begin{figure}[h!]
@@ -241,7 +250,7 @@ cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X
 
 The original method estimates the speed with approximately 80\% error whereas our method can estimate it with around 10\% error.
 The performance of our method is comparable to the one of state-of-the art Kalman Filter approach, although our technique
-does not require an initialization and now provides the gyroscope bias.
+\structure{does not require an initialization} and now provides the gyroscope bias.
 
 
 
