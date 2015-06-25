@@ -95,10 +95,10 @@ We added a \structure{key step} that makes the original method \structure{usable
   \centering
   \hspace*{-1em}
   \begin{subfigure}[t]{0.3\columnwidth}
-    \caption{Filter-based fusion}
+    \caption{Filter based fusion}
     %% \resizebox{\columnwidth}{!}{
     %%   \raggedleft
-    \hspace*{-3em}
+    \hspace*{-2em}
     \begin{tikzpicture}[scale=0.8,every node/.style={transform shape}]
       \node (A) at (-5,0) [input, fill=blue!60] {Initial State};
       \node (dummy1) [dummy, right=2mm of A] {};
@@ -159,16 +159,6 @@ We therefore have an overconstrained linear system that we can write in matrix f
     We can therefore recover the initial velocity, the distance to the point-features and the roll and pitch angle of the drone by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
     This method does not require any initialization.
 
-\vfill
-\columnbreak
-
-\section{Test setup}
-
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{images/setupTestDroneError.png}
-\end{figure}
-
 \subsection{Original performance}
 
 \begin{figure}[h!]
@@ -178,6 +168,14 @@ We therefore have an overconstrained linear system that we can write in matrix f
 \end{figure}
 
 With around 45\% of error on the speed and the distance to the features after 4 seconds of integration, the Original Closed-Form Solution does not perform very well on terrain data.
+
+\section{Test setup}
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{images/setupTestDroneError.png}
+\end{figure}
+
 
 \section{Impact of bias}
 We studied the impact of biased inertial sensors on the performance of the original Closed-Form Solution.
@@ -237,11 +235,11 @@ cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X
 \section{Results}
 \begin{figure}[h!]
   \centering
-  \caption{Speed estimation error over a time sequence (duration set to 3s)}
+  \caption{Speed estimation error over a time sequence}
   \resizebox{0.7\columnwidth}{!}{\input{graph/speed}}
 \end{figure}
 
-The original method estimates the speed with approximately 80\% error whereas our method can estimate it with 10\% error.
+The original method estimates the speed with approximately 80\% error whereas our method can estimate it with around 10\% error.
 The performance of our method is comparable to the one of state-of-the art Kalman Filter approach, although our technique
 does not require an initialization and now provides the gyroscope bias.
 
