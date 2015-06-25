@@ -10,6 +10,7 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
+compat=newest,
 width=3.7in,
 height=3in,
 at={(1.846in,1.155in)},
@@ -22,7 +23,9 @@ ytick={0.1,0.2,...,1,1.1},
 xtick={13,14,...,26,27},
 ymin=0,
 ymax=1,
-ylabel={Error}
+ylabel={Error},
+legend style={font=\footnotesize, legend cell align=left,align=left,draw=white!15!black},
+label style={font=\footnotesize}
 ]
 \addlegendimage{line legend,blue} % or mark=none?
 \addlegendentry{Original CF}

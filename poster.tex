@@ -31,7 +31,7 @@
 \definecolor{svectorcolor}{HTML}{5ABAC2}
 %% \definecolor{xvectorcolor}{HTML}{C34BB0}
 %% \definecolor{xvectorcolor}{HTML}{3C3DB5}
-\definecolor{xvectorcolor}{HTML}{7851DB}
+\definecolor{xvectorcolor}{HTML}{C09143}
 
 
 \tikzstyle{input}=[draw,fill=myyellow,minimum width=2.6cm,thin]
@@ -157,12 +157,14 @@ We therefore have an overconstrained linear system that we can write in matrix f
 \Xi \textcolor{xvectorcolor}{X} = S
 \]
 
-    The \textcolor{red}{initial velocity}, the \textcolor{blue}{distance to the point-features} and the \textcolor{green}{roll and pitch angles} of the drone can be recovered by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
+Where the matrix $\Xi$ and the vector $S$ are fully determined with visual and inertial measurements, and the vector $X$ contains the unknowns.
+
+Specifically, one can recover the \textcolor{red}{initial velocity}, the \textcolor{blue}{distance to the point-features} and the \textcolor{green}{roll and pitch angles} of the drone by finding the vector $\textcolor{xvectorcolor}{X}$ that satisfies this equation.
+
     This method does not require any initialization or knowledge of previous states.
 
     \vfill
     \columnbreak
-
 
 \section{Test setup}
 
@@ -235,7 +237,7 @@ The gyroscope bias is a 3D vector $B=[B_x,B_y,B_z]$. We can plot this cost funct
 
 Note that the residual is almost constant with respect to the third component of the gyroscope bias.
 This symmetry is induced by the strong weight of the gravity in the system.
-In order to prevent our optimization to converge towards high and unlikely values of the gyroscope bias, we add a regularization term to our cost function:
+In order to prevent our optimization to converge towards high and unlikely values of the gyroscope bias, we add a \structure{regularization term} to our cost function:
 
 \[
 cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X} - S||^2 \textcolor{blue}{+ \lambda \times |B|}
@@ -249,7 +251,7 @@ cost(B) = \argmin_{\textcolor{xvectorcolor}{X}} ||\Xi \textcolor{xvectorcolor}{X
 \end{figure}
 
 The original method estimates the speed with approximately 80\% error whereas our method can estimate it with around 10\% error.
-The performance of our method is comparable to the one of state-of-the art Kalman Filter approach, although our technique
+The performance of our method is comparable to the one of state-of-the art Extended Kalman Filter approach, although our technique
 \structure{does not require an initialization} and now provides the gyroscope bias.
 
 

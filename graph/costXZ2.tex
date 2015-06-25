@@ -19,7 +19,7 @@ xlabel={$B_x$ (rad/s)},
 xmajorgrids,
 ymin=-2,
 ymax=2,
-font=\tiny,
+font=\footnotesize,
 xtick={-2,-1.5,...,1.5,2},
 ytick={-2,-1.5,...,1.5,2},
 ylabel={$B_z$ (rad/s)},
@@ -32,10 +32,10 @@ view={-44.5}{20},
 axis x line*=bottom,
 axis y line*=left,
 axis z line*=left,
-label style={font=\Large}
+label style={font=\large}
 ]
 
-  \draw (axis cs:0,-1.1,0) node {\color{red} \large True bias} -> (axis cs:0.0800000000000001, 0.0800000000000001, 1.01510575861715);
+  \draw (axis cs:0,-0.5,0) node [below] {\color{red} \large True bias} -> (axis cs:0.0800000000000001, 0.0800000000000001, 1.01510575861715);
 
 \addplot3[%
 surf,
